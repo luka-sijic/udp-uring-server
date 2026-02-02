@@ -3,7 +3,7 @@
 #include <liburing.h>
 
 #include "core/router.hpp"
-#include "net/connection.h"
+#include "net/connection.hpp"
 
 class UringDriver : public INetOut {
 public:

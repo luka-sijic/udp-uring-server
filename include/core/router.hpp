@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "core/parser.hpp"
-#include "models/net.h"
+#include "models/net.hpp"
 #include "net/net_out.hpp"
 #include <unordered_map>
 

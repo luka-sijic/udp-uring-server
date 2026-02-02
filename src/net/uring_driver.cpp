@@ -6,7 +6,7 @@
 #include <signal.h>
 
 #include "core/helpers.h"
-#include "models/net.h"
+#include "models/net.hpp"
 
 enum class OP { REGISTER, UPDATE, BROADCAST, DEREGISTER };
 

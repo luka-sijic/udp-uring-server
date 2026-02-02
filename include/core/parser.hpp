@@ -1,7 +1,7 @@
 #pragma once
 #include <cstring>
 #include <iostream>
-#include <models/net.h>
+#include <models/net.hpp>
 
 /*
 op - 4 bytes
