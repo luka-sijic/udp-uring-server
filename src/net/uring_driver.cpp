@@ -154,6 +154,11 @@ void UringDriver::send_to(const sockaddr_storage &dst, socklen_t dst_len,
 
   // Queue sendmsg
   io_uring_sqe *sqe = io_uring_get_sqe(&ring_);
+  if (!sqe) {
+    // No SQE available; release slot so it can be reused.
+    ss->busy = false;
+    return;
+  }
   io_uring_prep_sendmsg(sqe, fd_, &ss->msg, 0);
 
   // Tag completion so your CQE handler knows it's a SEND for this slot
@@ -201,11 +206,16 @@ void UringDriver::recv(uint32_t slot, int res) noexcept {
 }
 
 void UringDriver::send(uint32_t slot, int res) noexcept {
-  auto &s = udp_[slot];
-
   if (res < 0) {
     std::cerr << "SEND error: " << strerror(-res) << " (" << res << ")\n";
   }
+
+  if (slot >= kSendSlots) {
+    std::cerr << "SEND completion slot out of range: " << slot << '\n';
+    return;
+  }
+
+  on_send_complete(slot, res);
 
   io_uring_submit(&ring_);
 }
