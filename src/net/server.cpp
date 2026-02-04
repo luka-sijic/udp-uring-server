@@ -1,5 +1,3 @@
-#include <liburing.h>
-
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <netinet/in.h>
@@ -10,7 +8,10 @@
 #include <iostream>
 
 #include "net/server.hpp"
+
+#ifdef __linux__
 #include "net/uring_driver.hpp"
+#endif
 
 int Server::make_listen_socket(uint16_t port) {
   int fd = ::socket(AF_INET, SOCK_DGRAM, 0);
@@ -48,7 +49,11 @@ int Server::make_listen_socket(uint16_t port) {
 
 Server::Server(uint16_t port) : port_(port) {
   int fd = make_listen_socket(port);
+#ifdef __linux__
   UringDriver driver(fd);
   // driver.run();
+#else
+  (void)fd;
+#endif
   std::cout << "Listening on 0.0.0.0:" << port << " (Ctrl+C to stop)\n";
 }

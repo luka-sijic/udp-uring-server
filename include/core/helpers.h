@@ -1,7 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <liburing.h>
-
 enum class Op : uint8_t { RECV = 1, SEND = 2, CLOSE = 3 };
 
 static inline uint64_t pack_ud_slot(Op op, uint32_t slot) {
