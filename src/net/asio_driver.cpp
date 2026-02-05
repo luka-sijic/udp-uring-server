@@ -33,7 +33,7 @@ AsioDriver::AsioDriver(std::uint16_t port)
 }
 
 void AsioDriver::start() {
-  std::cerr << "Server is running on port 9000" << '\n';
+  std::cerr << "Starting Boost ASIO service..." << '\n';
   start_receive();
   io_.run();
 }

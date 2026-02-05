@@ -2,9 +2,14 @@
 
 #include <cstdint>
 
+struct ServerConfig {
+  uint16_t port;
+  uint16_t threads;
+};
+
 class Server {
 public:
-  explicit Server(uint16_t port);
+  explicit Server(ServerConfig cfg) : port_(cfg.port), threads_(cfg.threads) {}
   static int make_listen_socket(uint16_t port);
   //~Server();
 
@@ -14,8 +19,9 @@ public:
   Server(const Server &) = delete;
   Server &operator=(const Server &) = delete;
 
-  void run();
+  void start();
 
 private:
   uint16_t port_;
+  uint16_t threads_;
 };

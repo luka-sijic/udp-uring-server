@@ -11,6 +11,8 @@
 
 #ifdef __linux__
 #include "net/uring_driver.hpp"
+#else
+#include "net/asio_driver.hpp"
 #endif
 
 int Server::make_listen_socket(uint16_t port) {
@@ -33,10 +35,11 @@ int Server::make_listen_socket(uint16_t port) {
     return -1;
   }
 
-  sockaddr_in addr{};
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons(port);
-  addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  sockaddr_in addr{
+      .sin_family = AF_INET,
+      .sin_port = htons(port),
+      .sin_addr = {.s_addr = htonl(INADDR_ANY)},
+  };
 
   if (::bind(fd, (sockaddr *)&addr, sizeof(addr)) < 0) {
     perror("bind");
@@ -47,13 +50,15 @@ int Server::make_listen_socket(uint16_t port) {
   return fd;
 }
 
-Server::Server(uint16_t port) : port_(port) {
-  int fd = make_listen_socket(port);
+void Server::start() {
+  int fd = make_listen_socket(port_);
+  std::cout << "Listening on 0.0.0.0:" << port_ << " (Ctrl+C to stop)\n";
 #ifdef __linux__
+  int fd = Server::make_listen_socket(port);
   UringDriver driver(fd);
-  // driver.run();
+  driver.start();
 #else
-  (void)fd;
+  AsioDriver driver(port_);
+  driver.start();
 #endif
-  std::cout << "Listening on 0.0.0.0:" << port << " (Ctrl+C to stop)\n";
 }
