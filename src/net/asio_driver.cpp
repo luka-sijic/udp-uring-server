@@ -6,11 +6,7 @@
 #include <span>
 #include <vector>
 
-#if defined(_WIN32)
-#include <winsock2.h>
-#else
 #include <arpa/inet.h>
-#endif
 
 using boost::asio::ip::udp;
 

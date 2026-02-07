@@ -20,8 +20,8 @@ public:
 
 private:
   void start_receive();
-  static boost::asio::ip::udp::endpoint to_endpoint(
-      const sockaddr_storage &dst, socklen_t dst_len) noexcept;
+  static boost::asio::ip::udp::endpoint to_endpoint(const sockaddr_storage &dst,
+                                                    socklen_t dst_len) noexcept;
 
   boost::asio::io_context io_;
   boost::asio::ip::udp::socket socket_;
@@ -29,7 +29,5 @@ private:
   std::array<std::byte, 2048> buf_{};
   Router router_;
 
-#if !defined(_WIN32)
   boost::asio::signal_set signals_;
-#endif
 };

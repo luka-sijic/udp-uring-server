@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <iostream>
 
+#include "core/log.hpp"
 #include "net/server.hpp"
 
 #ifdef __linux__
@@ -52,7 +53,7 @@ int Server::make_listen_socket(uint16_t port) {
 
 void Server::start() {
   int fd = make_listen_socket(port_);
-  std::cout << "Listening on 0.0.0.0:" << port_ << " (Ctrl+C to stop)\n";
+  UDP_LOGLN("Listening on 0.0.0.0:" << port_ << " (Ctrl+C to stop)");
 #ifdef __linux__
   int fd = Server::make_listen_socket(port);
   UringDriver driver(fd);

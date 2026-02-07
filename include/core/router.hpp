@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
+#include <unordered_map>
 
+#include "core/log.hpp"
 #include "core/parser.hpp"
 #include "models/net.hpp"
 #include "net/net_out.hpp"
-#include <unordered_map>
 
 // enum class Op : uint8_t { Register = 0, Disconnect = 1, Update = 2 };
 
@@ -14,8 +15,8 @@ public:
 
   void on_packet(const PacketView &pkt) {
     auto decoded = parser_.parse(pkt.bytes).value_or(Players{});
-    std::cerr << decoded.op << " " << decoded.id << " " << decoded.x << " "
-              << decoded.y << '\n';
+    UDP_LOGLN(decoded.op << " " << decoded.id << " " << decoded.x << " "
+                         << decoded.y << '\n');
     switch (decoded.op) {
     case 0:
       on_register(pkt, decoded);

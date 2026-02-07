@@ -29,12 +29,11 @@ public:
     if (bytes.size() < sizeof(Header))
       return std::nullopt;
 
-    Players p{};
+    Players ply{};
     if (bytes.size() == (int)sizeof(Players)) {
-      std::memcpy(&p, bytes.data(), sizeof(Players));
-      std::cerr << p.x << '\n';
+      std::memcpy(&ply, bytes.data(), sizeof(Players));
     }
-    return p;
+    return ply;
   }
 
 private:
