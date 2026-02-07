@@ -10,7 +10,7 @@ struct ServerConfig {
 class Server {
 public:
   explicit Server(ServerConfig cfg) : port_(cfg.port), threads_(cfg.threads) {}
-  static int make_listen_socket(uint16_t port);
+  int init();
   //~Server();
 
   Server(Server &&) = delete;

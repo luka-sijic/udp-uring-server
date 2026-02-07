@@ -16,7 +16,7 @@
 #include "net/asio_driver.hpp"
 #endif
 
-int Server::make_listen_socket(uint16_t port) {
+int Server::init() {
   int fd = ::socket(AF_INET, SOCK_DGRAM, 0);
   if (fd < 0) {
     perror("socket");
@@ -38,7 +38,7 @@ int Server::make_listen_socket(uint16_t port) {
 
   sockaddr_in addr{
       .sin_family = AF_INET,
-      .sin_port = htons(port),
+      .sin_port = htons(port_),
       .sin_addr = {.s_addr = htonl(INADDR_ANY)},
   };
 
@@ -52,7 +52,7 @@ int Server::make_listen_socket(uint16_t port) {
 }
 
 void Server::start() {
-  int fd = make_listen_socket(port_);
+  int fd = init();
   UDP_LOGLN("Listening on 0.0.0.0:" << port_ << " (Ctrl+C to stop)");
 #ifdef __linux__
   UringDriver driver(fd);
