@@ -29,7 +29,7 @@ AsioDriver::AsioDriver(std::uint16_t port)
 }
 
 void AsioDriver::start() {
-  std::cerr << "Starting Boost ASIO service..." << '\n';
+  UDP_LOGLN("Starting Boost ASIO service...");
   start_receive();
   io_.run();
 }

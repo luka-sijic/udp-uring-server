@@ -2,7 +2,7 @@
 #include <iostream>
 
 #ifndef UDP_LOG_ENABLED
-#define UDP_LOG_ENABLED 1
+#define UDP_LOG_ENABLED 1 
 #endif
 
 // clangd auto formatter breaking this?

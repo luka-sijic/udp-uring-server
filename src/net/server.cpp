@@ -55,7 +55,6 @@ void Server::start() {
   int fd = make_listen_socket(port_);
   UDP_LOGLN("Listening on 0.0.0.0:" << port_ << " (Ctrl+C to stop)");
 #ifdef __linux__
-  int fd = Server::make_listen_socket(port);
   UringDriver driver(fd);
   driver.start();
 #else

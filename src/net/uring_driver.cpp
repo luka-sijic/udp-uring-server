@@ -221,7 +221,7 @@ void UringDriver::send(uint32_t slot, int res) noexcept {
 }
 
 void UringDriver::start() noexcept {
-  std::cerr << "Server is running on port 9000" << '\n';
+  UDP_LOGLN("Server is running on port 9000");
   std::cerr.flush();
   while (!g_stop) {
     io_uring_cqe *cqe{};
