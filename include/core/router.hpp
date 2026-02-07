@@ -13,7 +13,7 @@ public:
   Router(INetOut &out) : out_(out) {}
 
   void on_packet(const PacketView &pkt) {
-    auto decoded = parser_.parse(pkt.bytes);
+    auto decoded = parser_.parse(pkt.bytes).value_or(Players{});
     std::cerr << decoded.op << " " << decoded.id << " " << decoded.x << " "
               << decoded.y << '\n';
     switch (decoded.op) {
