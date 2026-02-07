@@ -15,6 +15,7 @@ struct PeerInfo {
 };
 
 struct Players {
+  // magic
   std::uint32_t op; // 0 register 1 player update
   std::uint32_t id;
   float x;

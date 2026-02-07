@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <models/net.hpp>
+#include <optional>
 
 /*
 op - 4 bytes
@@ -13,22 +14,25 @@ size - 4 bytes
 
 */
 
-struct Init {
-  int x;
+struct Header {
+  uint8_t magic;
+  uint8_t type;
+  uint16_t len;
+  uint32_t seq;
 };
 
 class Parser {
 public:
   Parser() {}
 
-  Players parse(std::span<const std::byte> bytes) {
+  std::optional<Players> parse(std::span<const std::byte> bytes) {
+    if (bytes.size() < sizeof(Header))
+      return std::nullopt;
+
     Players p{};
     if (bytes.size() == (int)sizeof(Players)) {
       std::memcpy(&p, bytes.data(), sizeof(Players));
-      std::cerr << "PARSE TEST: ";
       std::cerr << p.x << '\n';
-    } else if (bytes.size() == (int)sizeof(Init)) {
-      std::cerr << "TEST" << '\n';
     }
     return p;
   }
