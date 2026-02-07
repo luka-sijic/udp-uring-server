@@ -16,7 +16,7 @@ public:
   void on_packet(const PacketView &pkt) {
     auto decoded = parser_.parse(pkt.bytes).value_or(Players{});
     UDP_LOGLN(decoded.op << " " << decoded.id << " " << decoded.x << " "
-                         << decoded.y << '\n');
+                         << decoded.y);
     switch (decoded.op) {
     case 0:
       on_register(pkt, decoded);
@@ -28,7 +28,7 @@ public:
       on_update(pkt, decoded);
       break;
     default:
-      std::cerr << "Unknown OP recv" << '\n';
+      UDP_LOGLN("Unknown OP recv");
       break;
     }
   }
@@ -36,13 +36,13 @@ public:
 private:
   void on_register(const PacketView &pkt, const Players &p) {
     players_[p.id] = {pkt.peer, pkt.peer_len};
-    std::cerr << "Player added: " << p.id << " " << p.op << '\n';
+    UDP_LOGLN("Player added: " << p.id << " " << p.op);
     broadcast_all(&p, sizeof(Players));
   }
 
   void on_disconnect(const PacketView &pkt, const Players &p) {
     players_.erase(p.id);
-    std::cerr << "Player disconnected: " << p.id << '\n';
+    UDP_LOGLN("Player disconnected: " << p.id);
   }
 
   void broadcast_all(const void *data, size_t len) {
@@ -60,7 +60,7 @@ private:
   }
 
   void on_update(const PacketView &pkt, const Players &p) {
-    std::cerr << "Sending data..." << '\n';
+    UDP_LOGLN("Sending data...");
     broadcast_all(&p, sizeof(Players));
   }
 

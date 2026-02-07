@@ -46,7 +46,7 @@ void AsioDriver::start_receive() {
           PacketView pkt{ss, len, span};
           router_.on_packet(pkt);
         } else if (ec != boost::asio::error::operation_aborted) {
-          std::cerr << "asio recv error: " << ec.message() << '\n';
+          UDP_LOGLN("asio recv error: " << ec.message());
         }
         start_receive();
       });
@@ -90,7 +90,7 @@ void AsioDriver::send_to(const sockaddr_storage &dst, socklen_t dst_len,
       boost::asio::buffer(*payload), ep,
       [payload](const boost::system::error_code &ec, std::size_t) {
         if (ec) {
-          std::cerr << "asio send error: " << ec.message() << '\n';
+          UDP_LOGLN("asio send error: " << ec.message());
         }
       });
 }

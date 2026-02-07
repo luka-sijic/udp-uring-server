@@ -186,8 +186,8 @@ void UringDriver::on_send_complete(uint32_t send_idx, int res) noexcept {
 void UringDriver::recv(uint32_t slot, int res) noexcept {
   auto &s = udp_[slot];
   if (res < 0) {
-    std::cerr << "RECV(slot=" << slot << ") err=" << strerror(-res) << " ( "
-              << res << ")\n";
+    UDP_LOGLN("RECV(slot=" << slot << ") err=" << strerror(-res) << " ( "
+              << res << ")");
     submit_recv(slot);
     io_uring_submit(&ring_);
     return;
@@ -207,11 +207,11 @@ void UringDriver::recv(uint32_t slot, int res) noexcept {
 
 void UringDriver::send(uint32_t slot, int res) noexcept {
   if (res < 0) {
-    std::cerr << "SEND error: " << strerror(-res) << " (" << res << ")\n";
+    UDP_LOGLN("SEND error: " << strerror(-res) << " (" << res << ")");
   }
 
   if (slot >= kSendSlots) {
-    std::cerr << "SEND completion slot out of range: " << slot << '\n';
+    UDP_LOGLN("SEND completion slot out of range: " << slot);
     return;
   }
 
@@ -229,7 +229,7 @@ void UringDriver::start() noexcept {
     if (rc < 0) {
       if (rc == -EINTR)
         continue;
-      std::cerr << "io_uring_wait_cqe: " << strerror(-rc) << "\n";
+      UDP_LOGLN("io_uring_wait_cqe: " << strerror(-rc));
       break;
     }
 
