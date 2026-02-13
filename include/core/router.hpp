@@ -2,16 +2,16 @@
 #include <iostream>
 #include <unordered_map>
 
+#include "core/spsc.hpp"
 #include "core/log.hpp"
 #include "core/parser.hpp"
 #include "models/net.hpp"
 #include "net/net_out.hpp"
 
-// enum class Op : uint8_t { Register = 0, Disconnect = 1, Update = 2 };
-
 class Router {
 public:
-  Router(INetOut &out) : out_(out) {}
+  Router(INetOut &out) : out_(out), q_(32) {}
+  SPSC<const PacketView> q_;
 
   void on_packet(const PacketView &pkt) {
     auto decoded = parser_.parse(pkt.bytes).value_or(Players{});

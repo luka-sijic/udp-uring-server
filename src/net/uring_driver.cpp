@@ -199,7 +199,8 @@ void UringDriver::recv(uint32_t slot, int res) noexcept {
   std::span<const std::byte> bytes =
       std::as_bytes(std::span{s.buf, static_cast<size_t>(res)});
   PacketView pkt{s.peer, s.peer_len, bytes};
-  router_.on_packet(pkt);
+  router_.q_.push(pkt);
+  //router_.on_packet(pkt);
 
   submit_recv(slot);
   io_uring_submit(&ring_);

@@ -8,14 +8,12 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(ENABLE_TRACE   "Enable tracing" OFF)
 option(ENABLE_ASAN    "Enable AddressSanitizer/UBSan (Debug-ish builds)" OFF)
 option(ENABLE_LTO     "Enable link-time optimization (Release-ish builds)" OFF)
 
 set(APP_SOURCES
   src/main.cpp
   src/net/server.cpp
-  src/handlers.cpp
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")

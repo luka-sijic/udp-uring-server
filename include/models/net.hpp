@@ -20,6 +20,6 @@ struct Players {
   std::uint32_t id;
   float x;
   float y;
-  std::uint32_t color;
+  std::uint8_t color;
   std::uint32_t size;
 };
