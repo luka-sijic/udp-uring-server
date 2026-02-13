@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <unordered_map>
+#include <thread>
 
 #include "core/spsc.hpp"
 #include "core/log.hpp"
@@ -10,8 +11,19 @@
 
 class Router {
 public:
-  Router(INetOut &out) : out_(out), q_(32) {}
-  SPSC<const PacketView> q_;
+  Router(INetOut &out) : out_(out), q_(32) {
+    t_ = std::thread(&Router::poll, this);
+    t_.detach();
+  }
+  void poll() {
+    PacketView pkt;
+    while (!q_.empty()) {
+        UDP_LOGLN("WORKING");
+        q_.pop(pkt);
+        on_packet(pkt);
+    }
+  }
+  SPSC<PacketView> q_;
 
   void on_packet(const PacketView &pkt) {
     auto decoded = parser_.parse(pkt.bytes).value_or(Players{});
@@ -65,6 +77,7 @@ private:
   }
 
   Parser parser_;
+  std::thread t_;
   INetOut &out_;
   std::unordered_map<uint32_t, PeerInfo> players_;
 };

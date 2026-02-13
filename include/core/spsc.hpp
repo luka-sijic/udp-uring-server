@@ -38,6 +38,13 @@ public:
         return true;
     }
 
+    [[nodiscard]] bool empty() const {
+        const auto readIdx  = readIdx_.load(std::memory_order_relaxed);
+        const auto writeIdx = writeIdx_.load(std::memory_order_relaxed);
+
+        return readIdx == writeIdx;
+    }
+
 private:
     size_t capacity_;
     std::unique_ptr<T[]> buf_;
