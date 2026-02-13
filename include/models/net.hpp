@@ -2,6 +2,7 @@
 #include <arpa/inet.h>
 #include <cstdint>
 #include <span>
+#include <type_traits>
 
 struct PacketView {
   sockaddr_storage peer;
@@ -15,11 +16,16 @@ struct PeerInfo {
 };
 
 struct Players {
-  // magic
-  std::uint32_t op; // 0 register 1 player update
+  // 0 register, 1 player, 2 update
+  std::uint32_t op;
   std::uint32_t id;
   float x;
   float y;
   std::uint8_t color;
   std::uint32_t size;
 };
+
+static_assert(std::is_standard_layout_v<Players>,
+              "Players must remain standard layout");
+static_assert(sizeof(Players) == 24,
+              "Players wire contract changed: expected 24-byte layout");
